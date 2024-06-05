@@ -20,3 +20,10 @@
 .is-done {
   opacity: 0.5;
 }
+
+.delete-button {
+  background-color: #e00000;
+  border: #7e0000 1px solid;
+  color: white;
+  border-radius: 5px;
+}
