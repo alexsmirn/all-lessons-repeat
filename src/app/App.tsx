@@ -1,12 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {Todolist} from "../features/Todolist";
+import {TaskType, Todolist} from "../features/Todolist";
 import {v1} from "uuid";
 
 type TodolistType = {
     id: string,
     title: string,
     filter: TodolistFilterType
+}
+
+type TasksStateType = {
+    [key: string]: TaskType[]
 }
 
 export type TodolistFilterType = 'all' | 'completed' | 'active'
@@ -21,7 +25,7 @@ function App() {
         {id: todolistId2, title: 'Todolist N2', filter: 'all'},
     ])
 
-    const [tasks, setTasks] = useState({
+    const [tasks, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
             {id: v1(), title: 'Todolist N1 Task N1', isDone: false},
             {id: v1(), title: 'Todolist N1 Task N2', isDone: false},
