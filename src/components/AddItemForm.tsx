@@ -1,5 +1,6 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button} from "./Button";
+import {Button} from "@mui/material";
+import TextField from '@mui/material/TextField';
 
 type AddItemFormPropsType = {
     //Callbacks
@@ -34,12 +35,15 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
     }
 
     return <div>
-        <input value={inputValue}
-               onChange={onChangeInputValue}
-               onKeyUp={addItemOnKeyUpHandler}
-               className={error ? 'error-input' : ''}
+        <TextField error={error}
+                   id={!error ? "outlined-basic" : "outlined-error"}
+                   label={!error ? "Enter title" : "Title is required"}
+                   variant="outlined"
+                   value={inputValue}
+                   onChange={onChangeInputValue}
+                   onKeyUp={addItemOnKeyUpHandler}
+                   size={'small'}
         />
-        <Button title={'+'} callBack={() => addItemHandler(inputValue)}/>
-        {error && <p className={'error-message'}>Title is required</p>}
+        <Button variant="contained" onClick={() => addItemHandler(inputValue)} size={'large'}>+</Button>
     </div>
 }

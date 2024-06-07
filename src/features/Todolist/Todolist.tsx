@@ -1,7 +1,11 @@
-import {Button} from "../components/Button";
-import {TodolistFilterType} from "../app/App";
-import {AddItemForm} from "../components/AddItemForm";
-import {EditableSpan} from "../components/EditableSpan";
+import {UniversalButton} from "../../components/Button";
+import {TodolistFilterType} from "../../app/App";
+import {AddItemForm} from "../../components/AddItemForm";
+import {EditableSpan} from "../../components/EditableSpan";
+import * as React from 'react';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
 
 export type TaskType = {
     id: string,
@@ -26,8 +30,6 @@ type TodolistPropsType = {
     changeTodolistTitle: (todolistId: string, newValue: string) => void
 }
 export const Todolist = (props: TodolistPropsType) => {
-
-
     const changeTasksFilterHandler = (todolistId: string, newFilterValue: TodolistFilterType) => {
         props.changeFilter(todolistId, newFilterValue)
     }
@@ -52,9 +54,13 @@ export const Todolist = (props: TodolistPropsType) => {
     }
 
     return (
-        <div>
+        <div className={'todolist'}>
             <h3>
                 <EditableSpan value={props.title} setNewValue={changeTodolistTitleHandler}/>
+
+                <IconButton aria-label="delete" size="small">
+                    <DeleteIcon fontSize="small" onClick={() => removeTodolistHandler(props.todolistId)}/>
+                </IconButton>
             </h3>
             <AddItemForm addItemCallBack={addTaskHandler}/>
             {props.tasks.length === 0 ? <p>Тасок нет</p> :
@@ -70,31 +76,31 @@ export const Todolist = (props: TodolistPropsType) => {
                                     changeTaskStatusHandler(props.todolistId, task.id)
                                 }}/>
                                 <EditableSpan value={task.title} setNewValue={changeTaskTitleHandler}/>
-                                <Button title={'X'} callBack={() => removeTaskHandler(props.todolistId, task.id)}/>
+                                <IconButton aria-label="delete" size="small">
+                                    <DeleteIcon fontSize="small" onClick={() => removeTaskHandler(props.todolistId, task.id)}/>
+                                </IconButton>
                             </li>
                         )
                     })}
                 </ul>
             }
             <div>
-                <Button title={'All'}
-                        callBack={() => changeTasksFilterHandler(props.todolistId, 'all')}
-                        className={props.filter === 'all' ? 'active-filter' : ''}
-                />
-                <Button title={'Completed'}
-                        callBack={() => changeTasksFilterHandler(props.todolistId, 'completed')}
-                        className={props.filter === 'completed' ? 'active-filter' : ''}
-                />
-                <Button title={'Active'}
-                        callBack={() => changeTasksFilterHandler(props.todolistId, 'active')}
-                        className={props.filter === 'active' ? 'active-filter' : ''}
-                />
-                <Button title={'Delete TD'}
-                        className={'delete-button'}
-                        callBack={() => removeTodolistHandler(props.todolistId)}
-                />
+                <Button
+                    variant={props.filter === 'all' ? 'contained' : 'outlined'}
+                    onClick={() => changeTasksFilterHandler(props.todolistId, 'all')}
+                >All</Button>
+
+                <Button
+                    variant={props.filter === 'completed' ? 'contained' : 'outlined'}
+                    onClick={() => changeTasksFilterHandler(props.todolistId, 'completed')}
+                >Completed</Button>
+
+                <Button
+                    variant={props.filter === 'active' ? 'contained' : 'outlined'}
+                    onClick={() => changeTasksFilterHandler(props.todolistId, 'active')}
+                >Active</Button>
             </div>
-            {props.date && <span>{props.date}</span>}
+            {props.date && <p>{props.date}</p>}
         </div>
     )
 }
