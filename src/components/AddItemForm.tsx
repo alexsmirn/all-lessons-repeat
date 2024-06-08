@@ -44,6 +44,6 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
                    onKeyUp={addItemOnKeyUpHandler}
                    size={'small'}
         />
-        <Button variant="contained" onClick={() => addItemHandler(inputValue)} size={'large'}>+</Button>
+        <Button variant="contained" onClick={() => addItemHandler(inputValue)} size={'medium'}>+</Button>
     </div>
 }
