@@ -16,7 +16,7 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import Button from "@mui/material/Button";
 
 
-type TodolistType = {
+export type TodolistType = {
     id: string,
     title: string,
     filter: TodolistFilterType
@@ -30,8 +30,7 @@ export type TodolistFilterType = 'all' | 'completed' | 'active'
 
 function App() {
 
-    const todolistId1 = v1()
-    const todolistId2 = v1()
+
 
     const [mode, setMode] = useState<'light' | 'dark'>('light')
 
