@@ -8,6 +8,9 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import Box from "@mui/material/Box";
+import {filterButtonsContainerSx} from "./Todolist.style";
+
 
 
 export type TaskType = {
@@ -74,20 +77,22 @@ export const Todolist = (props: TodolistPropsType) => {
                         }
 
                         return (
-                            <ListItem key={task.id}>
-                                <Checkbox checked={task.isDone} onChange={() => {
-                                    changeTaskStatusHandler(props.todolistId, task.id)
-                                }}/>
-                                <EditableSpan value={task.title} setNewValue={changeTaskTitleHandler}/>
-                                <IconButton aria-label="delete" size="small">
-                                    <DeleteIcon fontSize="small" onClick={() => removeTaskHandler(props.todolistId, task.id)}/>
+                            <ListItem key={task.id} sx={{padding: '0px', display: 'flex', justifyContent: 'space-between'}}>
+                                <div>
+                                    <Checkbox checked={task.isDone} onChange={() => {
+                                        changeTaskStatusHandler(props.todolistId, task.id)
+                                    }}/>
+                                    <EditableSpan value={task.title} setNewValue={changeTaskTitleHandler}/>
+                                </div>
+                                <IconButton aria-label="delete" size="small" sx={{padding: '0px'}}>
+                                    <DeleteIcon fontSize="medium" onClick={() => removeTaskHandler(props.todolistId, task.id)} />
                                 </IconButton>
                             </ListItem>
                         )
                     })}
                 </List>
             }
-            <div>
+            <Box sx={filterButtonsContainerSx}>
                 <Button
                     variant={props.filter === 'all' ? 'contained' : 'outlined'}
                     onClick={() => changeTasksFilterHandler(props.todolistId, 'all')}
@@ -102,8 +107,7 @@ export const Todolist = (props: TodolistPropsType) => {
                     variant={props.filter === 'active' ? 'contained' : 'outlined'}
                     onClick={() => changeTasksFilterHandler(props.todolistId, 'active')}
                 >Active</Button>
-            </div>
-            {props.date && <p>{props.date}</p>}
+            </Box>
         </div>
     )
 }

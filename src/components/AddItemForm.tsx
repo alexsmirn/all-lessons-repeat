@@ -1,6 +1,9 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button} from "@mui/material";
 import TextField from '@mui/material/TextField';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+
 
 type AddItemFormPropsType = {
     //Callbacks
@@ -34,7 +37,7 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
         }
     }
 
-    return <div>
+    return <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
         <TextField error={error}
                    id={!error ? "outlined-basic" : "outlined-error"}
                    label={!error ? "Enter title" : "Title is required"}
@@ -44,6 +47,8 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
                    onKeyUp={addItemOnKeyUpHandler}
                    size={'small'}
         />
-        <Button variant="contained" onClick={() => addItemHandler(inputValue)} size={'medium'}>+</Button>
-    </div>
+        <IconButton size={'large'} onClick={() => addItemHandler(inputValue)} color={'primary'} sx={{padding: '0px', height: '24px'}}>
+            <AddBoxIcon fontSize={'large'}/>
+        </IconButton>
+    </Box>
 }

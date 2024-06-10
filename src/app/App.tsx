@@ -6,12 +6,14 @@ import {AddItemForm} from "../components/AddItemForm";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Switch from '@mui/material/Switch';
+import {createTheme, ThemeProvider} from "@mui/material";
+import Button from "@mui/material/Button";
 
 
 type TodolistType = {
@@ -30,6 +32,8 @@ function App() {
 
     const todolistId1 = v1()
     const todolistId2 = v1()
+
+    const [mode, setMode] = useState<'light' | 'dark'>('light')
 
     const [todolists, setTodolists] = useState<TodolistType[]>([
         {id: todolistId1, title: 'Todolist N1', filter: 'all'},
@@ -106,68 +110,81 @@ function App() {
         setTodolists(todolists.map(tdl => tdl.id === todolistId ? {...tdl, title: newTitle} : tdl))
     }
 
+    const changeModeHandler = () => {
+        mode === 'light' ? setMode('dark') : setMode('light')
+    }
+
+    const theme = createTheme({
+        palette: {
+            mode: mode === 'light' ? "light" : 'dark'
+        }
+    })
+
     return (
-        <div className="App">
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
-                    </Typography>
-                    <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
-            <Container fixed>
-                <Grid container>
-                    <AddItemForm addItemCallBack={addTodolist}/>
-                </Grid>
-                <Grid container spacing={4}>
-                    {todolists.map(tdl => {
+        <ThemeProvider theme={theme}>
+            <div className="App">
+                <AppBar position="static" sx={{marginBottom: '40px'}}>
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{mr: 2}}
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                            News
+                        </Typography>
+                        <Button color="inherit">Login</Button>
+                        <Switch onChange={changeModeHandler}/>
+                    </Toolbar>
+                </AppBar>
+                <Container fixed>
+                    <Grid container sx={{mb: '20px'}}>
+                        <AddItemForm addItemCallBack={addTodolist}/>
+                    </Grid>
+                    <Grid container spacing={4}>
+                        {todolists.map(tdl => {
 
-                        let tasksForTodolist = tasks[tdl.id]
+                            let tasksForTodolist = tasks[tdl.id]
 
-                        if (tdl.filter === 'completed') {
-                            tasksForTodolist = tasks[tdl.id].filter(el => el.isDone)
-                        }
-                        if (tdl.filter === 'active') {
-                            tasksForTodolist = tasks[tdl.id].filter(el => !el.isDone)
-                        }
+                            if (tdl.filter === 'completed') {
+                                tasksForTodolist = tasks[tdl.id].filter(el => el.isDone)
+                            }
+                            if (tdl.filter === 'active') {
+                                tasksForTodolist = tasks[tdl.id].filter(el => !el.isDone)
+                            }
 
-                        return (
-                            <Grid item>
+                            return (
+                                <Grid item>
 
-                                <Paper elevation={2} square={false} style={{padding: '20px 40px'}}>
-                                    <Todolist key={tdl.id}
-                                              title={tdl.title}
-                                              tasks={tasksForTodolist}
-                                              date={'28.08.2024'}
-                                              filter={tdl.filter}
-                                              todolistId={tdl.id}
-                                        //Callbacks
-                                              removeTask={removeTask}
-                                              addTask={addTask}
-                                              changeTaskStatus={changeTaskStatus}
-                                              changeFilter={changeFilter}
-                                              removeTodolist={removeTodolist}
-                                              changeTaskTitle={changeTaskTitle}
-                                              changeTodolistTitle={changeTodolistTitle}
-                                    />
-                                </Paper>
-                            </Grid>
-                        )
-                    })}
-                </Grid>
-            </Container>
+                                    <Paper elevation={2} square={false} sx={{padding: '40px'}}>
+                                        <Todolist key={tdl.id}
+                                                  title={tdl.title}
+                                                  tasks={tasksForTodolist}
+                                                  date={'28.08.2024'}
+                                                  filter={tdl.filter}
+                                                  todolistId={tdl.id}
+                                            //Callbacks
+                                                  removeTask={removeTask}
+                                                  addTask={addTask}
+                                                  changeTaskStatus={changeTaskStatus}
+                                                  changeFilter={changeFilter}
+                                                  removeTodolist={removeTodolist}
+                                                  changeTaskTitle={changeTaskTitle}
+                                                  changeTodolistTitle={changeTodolistTitle}
+                                        />
+                                    </Paper>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
+                </Container>
 
-        </div>
+            </div>
+        </ThemeProvider>
     );
 }
 
