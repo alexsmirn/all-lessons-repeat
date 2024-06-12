@@ -22,7 +22,7 @@ export type TodolistType = {
     filter: TodolistFilterType
 }
 
-type TasksStateType = {
+export type TasksStateType = {
     [key: string]: TaskType[]
 }
 
@@ -39,24 +39,7 @@ function App() {
         {id: todolistId2, title: 'Todolist N2', filter: 'all'},
     ])
 
-    const [tasks, setTasks] = useState<TasksStateType>({
-        [todolistId1]: [
-            {id: v1(), title: 'Todolist N1 Task N1', isDone: false},
-            {id: v1(), title: 'Todolist N1 Task N2', isDone: false},
-            {id: v1(), title: 'Todolist N1 Task N3', isDone: true},
-            {id: v1(), title: 'Todolist N1 Task N4', isDone: true},
-            {id: v1(), title: 'Todolist N1 Task N5', isDone: true},
-            {id: v1(), title: 'Todolist N1 Task N6', isDone: true},
-        ],
-        [todolistId2]: [
-            {id: v1(), title: 'Todolist N2 Task N1', isDone: false},
-            {id: v1(), title: 'Todolist N2 Task N2', isDone: false},
-            {id: v1(), title: 'Todolist N2 Task N3', isDone: true},
-            {id: v1(), title: 'Todolist N2 Task N4', isDone: true},
-            {id: v1(), title: 'Todolist N2 Task N5', isDone: true},
-            {id: v1(), title: 'Todolist N2 Task N6', isDone: true},
-        ]
-    })
+    const [tasks, setTasks] = useState<TasksStateType>(3)
 
     useEffect(() => {
         console.log('UseEffect')
