@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from "../features/Todolist/Todolist";
 import {v1} from "uuid";
@@ -14,6 +14,14 @@ import Paper from '@mui/material/Paper';
 import Switch from '@mui/material/Switch';
 import {createTheme, ThemeProvider} from "@mui/material";
 import Button from "@mui/material/Button";
+import {
+    addTodolistAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    deleteTodolistAC,
+    todolistsReducer
+} from "../model/todolists-reducer";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "../model/tasks-reducer";
 
 
 export type TodolistType = {
@@ -28,19 +36,19 @@ export type TasksStateType = {
 
 export type TodolistFilterType = 'all' | 'completed' | 'active'
 
-function App() {
+function AppWithReducers() {
 
     const todolistId1 = v1()
     const todolistId2 = v1()
 
     const [mode, setMode] = useState<'light' | 'dark'>('light')
 
-    const [todolists, setTodolists] = useState<TodolistType[]>([
+    const [todolists, dispatchToTodolists] = useReducer(todolistsReducer, [
         {id: todolistId1, title: 'Todolist N1', filter: 'all'},
         {id: todolistId2, title: 'Todolist N2', filter: 'all'},
     ])
 
-    const [tasks, setTasks] = useState<TasksStateType>({
+    const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
             [todolistId1]: [
                 {id: '1', title: 'Todolist N1 Task N1', isDone: false},
                 {id: '2', title: 'Todolist N1 Task N2', isDone: false},
@@ -59,48 +67,39 @@ function App() {
     })
 
     const removeTask = (todolistId: string, taskId: string) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId)})
+        dispatchToTasks(removeTaskAC(todolistId, taskId))
     }
 
     const addTask = (todolistId: string, title: string) => {
-        const newTask = {id: v1(), title, isDone: false}
-        setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
+        dispatchToTasks(addTaskAC(todolistId, title))
     }
 
     const changeTaskStatus = (todolistId: string, taskId: string) => {
-        setTasks({
-            ...tasks, [todolistId]: tasks[todolistId].map(task => {
-                return task.id === taskId ? {...task, isDone: !task.isDone} : task
-            })
-        })
+        dispatchToTasks(changeTaskStatusAC(todolistId, taskId))
     }
 
     const changeTaskTitle = (todolistId: string, taskId: string, newTitle: string) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].map((t) =>
-                t.id === taskId ? {...t, title: newTitle} : t
-            )})
+        dispatchToTasks(changeTaskTitleAC(todolistId, taskId, newTitle))
     }
 
     const changeFilter = (todolistId: string, newFilterValue: TodolistFilterType) => {
-        setTodolists(todolists.map(tdl => tdl.id === todolistId ? {...tdl, filter: newFilterValue} : tdl))
+        dispatchToTodolists(changeTodolistFilterAC(todolistId, newFilterValue))
     }
 
     const removeTodolist = (todolistId: string) => {
-        const newTodolists = todolists.filter(tdl => tdl.id !== todolistId)
-        setTodolists(newTodolists)
-
-        delete tasks[todolistId]
-        setTasks({...tasks})
+        const action = deleteTodolistAC(todolistId)
+        dispatchToTodolists(action)
+        dispatchToTasks(action)
     }
 
     const addTodolist = (title: string) => {
-        const newTodolist: TodolistType = {id: v1(), title: title, filter: "all"}
-        setTodolists([newTodolist, ...todolists])
-        setTasks({[newTodolist.id]: [], ...tasks})
+        const action = addTodolistAC(title)
+        dispatchToTodolists(action)
+        dispatchToTasks(action)
     }
 
     const changeTodolistTitle = (todolistId: string, newTitle: string) => {
-        setTodolists(todolists.map(tdl => tdl.id === todolistId ? {...tdl, title: newTitle} : tdl))
+        dispatchToTodolists(changeTodolistTitleAC(todolistId, newTitle))
     }
 
     const changeModeHandler = () => {
@@ -181,4 +180,4 @@ function App() {
 }
 
 // @ts-ignore
-export default App;
+export default AppWithReducers;

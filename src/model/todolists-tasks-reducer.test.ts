@@ -2,18 +2,23 @@ import {v1} from "uuid";
 import {TodolistType} from "../app/App";
 import {addTodolistAC, deleteTodolistAC, todolistsReducer} from "./todolists-reducer";
 import {tasksReducer} from "./tasks-reducer";
+import {TaskType} from "../features/Todolist/Todolist";
 
-test('correct todolist should be deleted', () => {
+let todolistId1: string
+let todolistId2: string
+let todolistInitialState: TodolistType[]
+let tasksInitialState: {[key: string]: TaskType[]}
+beforeEach(() => {
     //Initial state
-    const todolistId1 = v1()
-    const todolistId2 = v1()
+    todolistId1 = v1()
+    todolistId2 = v1()
 
-    const todolistInitialState: TodolistType[] = [
+    todolistInitialState = [
         {id: todolistId1, title: 'Todolist N1', filter: 'all'},
         {id: todolistId2, title: 'Todolist N2', filter: 'all'},
     ]
 
-    const tasksInitialState = {
+    tasksInitialState = {
         [todolistId1]: [
             {id: '1', title: 'Todolist N1 Task N1', isDone: false},
             {id: '2', title: 'Todolist N1 Task N2', isDone: false},
@@ -23,7 +28,9 @@ test('correct todolist should be deleted', () => {
             {id: '2', title: 'Todolist N2 Task N2', isDone: false},
         ]
     }
+})
 
+test('correct todolist should be deleted', () => {
     const action = deleteTodolistAC(todolistId1)
     const resultStateTodolists = todolistsReducer(todolistInitialState, action)
     const resultStateTasks = tasksReducer(tasksInitialState, action)
@@ -31,36 +38,18 @@ test('correct todolist should be deleted', () => {
     const keys = Object.keys(resultStateTasks)
 
     expect(resultStateTodolists).toEqual([{id: todolistId2, title: 'Todolist N2', filter: 'all'}])
-    expect(resultStateTasks).toEqual({[todolistId2]: [
+    expect(resultStateTasks).toEqual({
+        [todolistId2]: [
             {id: '1', title: 'Todolist N2 Task N1', isDone: false},
             {id: '2', title: 'Todolist N2 Task N2', isDone: false},
-        ]})
+        ]
+    })
 
     expect(resultStateTodolists.length).toBe(1)
     expect(keys.length).toBe(1)
 })
 
 test('correct todolist should be added', () => {
-    //Initial state
-    const todolistId1 = v1()
-    const todolistId2 = v1()
-
-    const todolistInitialState: TodolistType[] = [
-        {id: todolistId1, title: 'Todolist N1', filter: 'all'},
-        {id: todolistId2, title: 'Todolist N2', filter: 'all'},
-    ]
-
-    const tasksInitialState = {
-        [todolistId1]: [
-            {id: '1', title: 'Todolist N1 Task N1', isDone: false},
-            {id: '2', title: 'Todolist N1 Task N2', isDone: false},
-        ],
-        [todolistId2]: [
-            {id: '1', title: 'Todolist N2 Task N1', isDone: false},
-            {id: '2', title: 'Todolist N2 Task N2', isDone: false},
-        ]
-    }
-
     const newTodolistTitle = 'Task & Todolist Reducer'
 
     const action = addTodolistAC(newTodolistTitle)

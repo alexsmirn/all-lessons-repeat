@@ -1,20 +1,26 @@
 import {v1} from "uuid";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitle, removeTaskAC, tasksReducer} from "./tasks-reducer";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
+import {TaskType} from "../features/Todolist/Todolist";
 
-//Initial state
-const todolistId1 = v1()
-const todolistId2 = v1()
+let todolistId1: string
+let todolistId2: string
+let initialState: {[key: string]: TaskType[]}
 
-const initialState = {
-    [todolistId1]: [
-        {id: '1', title: 'Todolist N1 Task N1', isDone: false},
-        {id: '2', title: 'Todolist N1 Task N2', isDone: false},
-    ],
-    [todolistId2]: [
-        {id: '1', title: 'Todolist N2 Task N1', isDone: false},
-        {id: '2', title: 'Todolist N2 Task N2', isDone: false},
-    ]
-}
+beforeEach(() => {
+    todolistId1 = v1()
+    todolistId2 = v1()
+
+    initialState = {
+        [todolistId1]: [
+            {id: '1', title: 'Todolist N1 Task N1', isDone: false},
+            {id: '2', title: 'Todolist N1 Task N2', isDone: false},
+        ],
+        [todolistId2]: [
+            {id: '1', title: 'Todolist N2 Task N1', isDone: false},
+            {id: '2', title: 'Todolist N2 Task N2', isDone: false},
+        ]
+    }
+})
 
 test('correct task should be deleted from correct todolist', () => {
     const action = removeTaskAC(todolistId1, '2')
@@ -44,7 +50,7 @@ test('correct task should be added to correct todolist', () => {
 })
 
 test('correct tasks status should be changed', () => {
-   const action = changeTaskStatusAC(todolistId1, '1', true)
+   const action = changeTaskStatusAC(todolistId1, '1')
 
     const resultState = tasksReducer(initialState, action)
 
@@ -53,7 +59,7 @@ test('correct tasks status should be changed', () => {
 
 test('correct tasks title should be changed on correct title', () => {
     const newTitle = 'Task new title (tasksReducer)'
-    const action = changeTaskTitle(todolistId1, '1', newTitle)
+    const action = changeTaskTitleAC(todolistId1, '1', newTitle)
 
     const resultState = tasksReducer(initialState, action)
 
