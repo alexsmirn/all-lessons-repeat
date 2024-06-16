@@ -1,4 +1,4 @@
-import {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from "@mui/material/IconButton";
@@ -10,7 +10,9 @@ type AddItemFormPropsType = {
     addItemCallBack: (title: string) => void
 }
 
-export const AddItemForm = (props: AddItemFormPropsType) => {
+export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
+    console.log('AddItemForm called')
+
     const [inputValue, setInputValue] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
@@ -51,4 +53,4 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
             <AddBoxIcon fontSize={'large'}/>
         </IconButton>
     </Box>
-}
+})
