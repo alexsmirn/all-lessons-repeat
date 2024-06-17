@@ -1,18 +1,15 @@
 import {AddItemForm} from "../../components/AddItemForm";
 import {EditableSpan} from "../../components/EditableSpan";
 import * as React from 'react';
+import {useCallback} from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import Box from "@mui/material/Box";
 import {filterButtonsContainerSx} from "./Todolist.style";
-import {useCallback} from "react";
 import {TodolistFilterType} from "../../app/AppWithRedux";
 import {Task} from "./Task";
-
 
 
 export type TaskType = {
@@ -38,9 +35,6 @@ type TodolistPropsType = {
     changeTodolistTitle: (todolistId: string, newValue: string) => void
 }
 export const Todolist = React.memo((props: TodolistPropsType) => {
-    console.log('Todolist called')
-    console.log(props.tasks)
-
     const changeTasksFilterHandler = (todolistId: string, newFilterValue: TodolistFilterType) => {
         props.changeFilter(todolistId, newFilterValue)
     }
@@ -88,7 +82,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                                   changeTaskTitle={props.changeTaskTitle}
                                   changeTaskStatus={props.changeTaskStatus}
                                   removeTask={props.removeTask}
-                        />
+                            />
                         )
                     })}
                 </List>

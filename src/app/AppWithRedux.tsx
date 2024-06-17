@@ -40,16 +40,10 @@ export type TodolistFilterType = 'all' | 'completed' | 'active'
 function AppWithRedux() {
     console.log('App called')
 
-    const todolistId1 = v1()
-    const todolistId2 = v1()
-
     const [mode, setMode] = useState<'light' | 'dark'>('light')
 
     const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    console.log(todolists)
-    console.log(todolists[0].filter)
-    console.log(tasks)
     const dispatch = useDispatch()
 
     const removeTask = useCallback((todolistId: string, taskId: string) => {
