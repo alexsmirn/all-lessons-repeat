@@ -8,15 +8,9 @@ import Button from '@mui/material/Button';
 import List from '@mui/material/List'
 import Box from "@mui/material/Box";
 import {filterButtonsContainerSx} from "./Todolist.style";
-import {TodolistFilterType} from "../../app/AppWithRedux";
 import {Task} from "./Task";
-
-
-export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
+import {TodolistFilterType} from "../../model/todolists-reducer";
+import {TaskStatuses, TaskType} from "../../api/todolist-api";
 
 type TodolistPropsType = {
     title: string
@@ -54,10 +48,10 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     let tasksForTodolist = props.tasks
 
     if (props.filter === 'completed') {
-        tasksForTodolist = props.tasks.filter(el => el.isDone)
+        tasksForTodolist = props.tasks.filter(el => el.status === TaskStatuses.Completed)
     }
     if (props.filter === 'active') {
-        tasksForTodolist = props.tasks.filter(el => !el.isDone)
+        tasksForTodolist = props.tasks.filter(el => el.status === TaskStatuses.InProgress)
     }
 
     return (
@@ -76,7 +70,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                             <Task key={task.id}
                                   taskId={task.id}
                                   title={task.title}
-                                  isDone={task.isDone}
+                                  status={task.status}
                                   todolistId={props.todolistId}
                                 //CallBacks
                                   changeTaskTitle={props.changeTaskTitle}

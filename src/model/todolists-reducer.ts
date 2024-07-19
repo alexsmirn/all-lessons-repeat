@@ -1,13 +1,10 @@
 import {v1} from "uuid";
-import {TodolistFilterType, TodolistType} from "../app/AppWithRedux";
+import {TodolistType} from "../api/todolist-api";
 
 export const todolistId1 = v1()
 export const todolistId2 = v1()
 
-const initialState: TodolistType[] = [
-    {id: todolistId1, title: 'Todolist N1', filter: 'all'},
-    {id: todolistId2, title: 'Todolist N2', filter: 'all'},
-]
+const initialState: TodolistDomainType[] = []
 
 //Action Types
 export type AddTodolistActionType = {
@@ -29,6 +26,15 @@ export type DeleteTodolistActionType = {
     type: 'DELETE-TODOLIST'
     todolistId: string
 }
+export type SetTodolistsActionType = {
+    type: 'SET-TODOLISTS'
+    todolists: TodolistType[]
+}
+
+export type TodolistFilterType = 'all' | 'completed' | 'active'
+export type TodolistDomainType = TodolistType & {
+    filter: TodolistFilterType
+}
 
 type ActionsType =
     | AddTodolistActionType
@@ -36,10 +42,16 @@ type ActionsType =
     | ChangeTodolistFilterActionType
     | DeleteTodolistActionType
 
-export const todolistsReducer = (state: TodolistType[] = initialState, action: ActionsType): TodolistType[] => {
+export const todolistsReducer = (state: TodolistDomainType[] = initialState, action: ActionsType): TodolistDomainType[] => {
     switch (action.type) {
         case 'ADD-TODOLIST': {
-            return [{id: action.todolistId, title: action.title, filter: "all"}, ...state]
+            return [{
+                id: action.todolistId,
+                title: action.title,
+                filter: "all",
+                addedDate: '',
+                order: 0
+            }, ...state]
         }
 
         case 'CHANGE-TODOLIST-TITLE': {
@@ -60,6 +72,10 @@ export const todolistsReducer = (state: TodolistType[] = initialState, action: A
             return state
         }
     }
+}
+
+export const setTodolistsAC = (todolists: TodolistType[]): SetTodolistsActionType => {
+    return {type: "SET-TODOLISTS", todolists}
 }
 
 export const addTodolistAC = (title: string): AddTodolistActionType => {

@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
-import {TaskType} from "../features/Todolist/Todolist";
+import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolist-api";
 
 let todolistId1: string
 let todolistId2: string
@@ -12,12 +12,21 @@ beforeEach(() => {
 
     initialState = {
         [todolistId1]: [
-            {id: '1', title: 'Todolist N1 Task N1', isDone: false},
-            {id: '2', title: 'Todolist N1 Task N2', isDone: false},
+            {id: '1', title: 'Todolist N1 Task N1', todolistId: todolistId1,
+                status: TaskStatuses.Completed, priority: TaskPriorities.Low,
+                description: '', startDate: '', deadline: '', order: 0, addedDate: ''
+            },
+            {id: '2', title: 'Todolist N1 Task N2', todolistId: todolistId1,
+                status: TaskStatuses.Completed, priority: TaskPriorities.Low,
+                description: '', startDate: '', deadline: '', order: 0, addedDate: ''},
         ],
         [todolistId2]: [
-            {id: '1', title: 'Todolist N2 Task N1', isDone: false},
-            {id: '2', title: 'Todolist N2 Task N2', isDone: false},
+            {id: '1', title: 'Todolist N2 Task N1', todolistId: todolistId1,
+                status: TaskStatuses.Completed, priority: TaskPriorities.Low,
+                description: '', startDate: '', deadline: '', order: 0, addedDate: ''},
+            {id: '2', title: 'Todolist N2 Task N2', todolistId: todolistId1,
+                status: TaskStatuses.Completed, priority: TaskPriorities.Low,
+                description: '', startDate: '', deadline: '', order: 0, addedDate: ''},
         ]
     }
 })
@@ -54,7 +63,7 @@ test('correct tasks status should be changed', () => {
 
     const resultState = tasksReducer(initialState, action)
 
-    expect(resultState[todolistId1][0].isDone).toBe(true)
+    expect(resultState[todolistId1][0].status).toBe(true)
 })
 
 test('correct tasks title should be changed on correct title', () => {

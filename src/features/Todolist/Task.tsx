@@ -4,12 +4,12 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListItem from "@mui/material/ListItem";
 import * as React from "react";
-import {TaskType} from "./Todolist";
+import {TaskStatuses} from "../../api/todolist-api";
 
 type TaskPropsType = {
     taskId: string
     title: string
-    isDone: boolean
+    status: TaskStatuses
     todolistId: string
     //CallBacks
     changeTaskTitle: (todolistId: string, taskId: string, newTitle: string) => void
@@ -33,7 +33,7 @@ export const Task = (props: TaskPropsType) => {
     return (
         <ListItem key={props.taskId} sx={{padding: '0px', display: 'flex', justifyContent: 'space-between'}}>
             <div>
-                <Checkbox checked={props.isDone} onChange={() => {
+                <Checkbox checked={props.status === TaskStatuses.Completed} onChange={() => {
                     changeTaskStatusHandler(props.todolistId, props.taskId)
                 }}/>
                 <EditableSpan value={props.title} setNewValue={changeTaskTitleHandler}/>

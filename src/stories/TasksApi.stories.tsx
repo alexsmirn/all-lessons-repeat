@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react";
-import {todolistApi} from "../api/todolist-api";
+import {ChangeTaskModelType, todolistApi} from "../api/todolist-api";
+import {store} from "../state/store";
 
 export default {title: 'Api Tasks'}
+
+
 
 export const getTasks = () => {
     const [state, setState] = useState<any>(null)
@@ -30,7 +33,19 @@ export const updateTaskTitle = () => {
     const taskId = 'ee00b822-5ef4-4dd8-a9ef-1abb3b8586bf'
     const newTitle = 'New Updated Title For Task😱'
     useEffect(() => {
-        todolistApi.changeTask(todolistId, taskId, newTitle)
+        const rootState = store.getState()
+        const task = rootState.tasks['364b1cc9-d281-413b-af4a-be8ec12e8092'].find(el => el.id === 'ee00b822-5ef4-4dd8-a9ef-1abb3b8586bf')
+
+            const model: ChangeTaskModelType = {
+                title: newTitle,
+                description: task!.description,
+                status: task!.status,
+                priority: task!.priority,
+                startDate: task!.startDate,
+                deadline: task!.deadline,
+            }
+
+        todolistApi.changeTask(todolistId, taskId, model)
             .then(res => setState(res.data))
     }, [])
     return <div>{JSON.stringify(state)}</div>
