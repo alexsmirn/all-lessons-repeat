@@ -1,7 +1,7 @@
 import {AddItemForm} from "../../components/AddItemForm";
 import {EditableSpan} from "../../components/EditableSpan";
 import * as React from 'react';
-import {useCallback} from 'react';
+import {useCallback, useEffect} from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
@@ -11,6 +11,8 @@ import {filterButtonsContainerSx} from "./Todolist.style";
 import {Task} from "./Task";
 import {TodolistFilterType} from "../../model/todolists-reducer";
 import {TaskStatuses, TaskType} from "../../api/todolist-api";
+import {useAppDispatch} from "../../state/store";
+import {setTasksTC} from "../../model/tasks-reducer";
 
 type TodolistPropsType = {
     title: string
@@ -29,6 +31,13 @@ type TodolistPropsType = {
     changeTodolistTitle: (todolistId: string, newValue: string) => void
 }
 export const Todolist = React.memo((props: TodolistPropsType) => {
+
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(setTasksTC(props.todolistId))
+    }, []);
+
     const changeTasksFilterHandler = (todolistId: string, newFilterValue: TodolistFilterType) => {
         props.changeFilter(todolistId, newFilterValue)
     }
@@ -63,7 +72,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                 </IconButton>
             </h3>
             <AddItemForm addItemCallBack={addTaskHandler}/>
-            {!props.tasks || props.tasks.length === 0 ? <p>Тасок нет</p> :
+            {/*{!props.tasks || props.tasks.length === 0 ? <p>Тасок нет</p> :*/}
                 <List>
                     {tasksForTodolist.map(task => {
                         return (
@@ -80,7 +89,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                         )
                     })}
                 </List>
-            }
+            {/*}*/}
             <Box sx={filterButtonsContainerSx}>
                 <Button
                     variant={props.filter === 'all' ? 'contained' : 'outlined'}
