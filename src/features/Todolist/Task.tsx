@@ -5,6 +5,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ListItem from "@mui/material/ListItem";
 import * as React from "react";
 import {TaskStatuses} from "../../api/todolist-api";
+import {useAppDispatch} from "../../state/store";
+import {changeTaskStatusTC, deleteTaskTC} from "../../model/tasks-reducer";
 
 type TaskPropsType = {
     taskId: string
@@ -13,17 +15,21 @@ type TaskPropsType = {
     todolistId: string
     //CallBacks
     changeTaskTitle: (todolistId: string, taskId: string, newTitle: string) => void
-    changeTaskStatus: (todolistId: string, taskId: string) => void
     removeTask: (todolistId: string, taskId: string) => void
 }
 
 export const Task = (props: TaskPropsType) => {
+    const dispatch = useAppDispatch()
+
     const changeTaskStatusHandler = (todolistId: string, taskId: string) => {
-        props.changeTaskStatus(todolistId, taskId)
+
+        const newStatus = props.status === TaskStatuses.InProgress ? TaskStatuses.Completed : TaskStatuses.InProgress
+
+        dispatch(changeTaskStatusTC(todolistId, taskId, newStatus))
     }
 
     const removeTaskHandler = (todolistId: string, taskId: string) => {
-        props.removeTask(todolistId, taskId)
+        dispatch(deleteTaskTC(props.todolistId, props.taskId))
     }
 
     const changeTaskTitleHandler = (title: string) => {

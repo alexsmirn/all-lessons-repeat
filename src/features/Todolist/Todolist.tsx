@@ -12,7 +12,7 @@ import {Task} from "./Task";
 import {TodolistFilterType} from "../../model/todolists-reducer";
 import {TaskStatuses, TaskType} from "../../api/todolist-api";
 import {useAppDispatch} from "../../state/store";
-import {setTasksTC} from "../../model/tasks-reducer";
+import {addTaskTC, setTasksTC} from "../../model/tasks-reducer";
 
 type TodolistPropsType = {
     title: string
@@ -23,8 +23,6 @@ type TodolistPropsType = {
 
     //CallBacks
     removeTask: (todolistId: string, taskId: string) => void
-    addTask: (todolistId: string, title: string) => void,
-    changeTaskStatus: (todolistId: string, taskId: string) => void,
     changeFilter: (todolistId: string, newFilterValue: TodolistFilterType) => void
     removeTodolist: (todolistId: string) => void
     changeTaskTitle: (todolistId: string, taskId: string, newTitle: string) => void
@@ -47,8 +45,8 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     }
 
     const addTaskHandler = useCallback((title: string) => {
-        props.addTask(props.todolistId, title)
-    }, [props.addTask, props.todolistId])
+        dispatch(addTaskTC(props.todolistId, title))
+    }, [props.todolistId])
 
     const changeTodolistTitleHandler = useCallback((newValue: string) => {
         props.changeTodolistTitle(props.todolistId, newValue)
@@ -83,7 +81,6 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                                   todolistId={props.todolistId}
                                 //CallBacks
                                   changeTaskTitle={props.changeTaskTitle}
-                                  changeTaskStatus={props.changeTaskStatus}
                                   removeTask={props.removeTask}
                             />
                         )
